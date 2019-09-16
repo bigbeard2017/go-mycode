@@ -1,2 +1,2 @@
-# go-src
+# go-mycode
 go code
