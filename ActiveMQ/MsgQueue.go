@@ -1,11 +1,12 @@
 package main
 
 import (
-	"ActiveMQ/activemq"
 	"bufio"
 	"fmt"
 	"os"
 	"strconv"
+
+	"go-mycode/ActiveMQ/activemq"
 )
 
 func main() {
@@ -13,7 +14,20 @@ func main() {
 }
 
 func CallActiveMq() {
-	host, port, user, pwd := "127.0.0.1", "61613", "admin", "123456"
+	//host, port, user, pwd := "127.0.0.1", "61613", "admin", "123456"
+	println("please input host:")
+	inputReader := bufio.NewReader(os.Stdin)
+	b, _, _ := inputReader.ReadLine()
+	host := string(b)
+	println("please input port:")
+	b, _, _ = inputReader.ReadLine()
+	port := string(b)
+	println("please input user:")
+	b, _, _ = inputReader.ReadLine()
+	user := string(b)
+	println("please input password:")
+	b, _, _ = inputReader.ReadLine()
+	pwd := string(b)
 	var queues = []string{"SPF300006", "QueueA"}
 	ConnectToServerB(host, port, user, pwd, queues)
 }
@@ -28,7 +42,7 @@ func ConnectToServerB(host, port, user, pwd string, queues []string) {
 		fmt.Printf("from [%s] data :[%s]\r\n", queueName, msg)
 	})
 	if err != nil {
-		println(err)
+		println(err.Error())
 		return
 	}
 	println("press [q]  to exit...")
