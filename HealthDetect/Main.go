@@ -15,6 +15,6 @@ func main() {
 	}
 	for p := range result {
 		o := result[p]
-		fmt.Printf("cpu:%f,mem:%f,pid:%d,processName:%s,path:%s\r\n", o.CPU, o.Memory, o.Pid, o.ProcessName, o.ProcessPath)
+		fmt.Printf("cpu:%f,mem:%f,pid:%d,processName:%s,cmd:%s\r", o.CPU, o.Memory, o.Pid, o.ProcessName, o.ProcessPath)
 	}
 }

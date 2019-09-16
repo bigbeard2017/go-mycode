@@ -18,6 +18,8 @@ type Process struct {
 	Memory      float64
 	ThreadCount int
 	Pid         int
+	StartTime   string
+	User        string
 }
 
 /**
@@ -47,6 +49,7 @@ func (p *Process) GetAllProcess() ([]Process, error) {
 				ft = append(ft, t)
 			}
 		}
+		user := ft[0]
 		pid, err := strconv.Atoi(ft[1])
 		if err != nil {
 			continue
@@ -56,10 +59,15 @@ func (p *Process) GetAllProcess() ([]Process, error) {
 			log.Fatal(err)
 		}
 		mem, err := strconv.ParseFloat(ft[5], 64)
-
+		startTime := ft[8]
 		cmd := ft[10]
+		if len(ft) > 10 {
+			for index := 11; index < len(ft); index++ {
+				cmd = cmd + " " + ft[index]
+			}
+		}
 
-		processes = append(processes, Process{Pid: pid, CPU: cpu, Memory: mem, ProcessPath: cmd})
+		processes = append(processes, Process{User: user, Pid: pid, CPU: cpu, Memory: mem, StartTime: startTime, ProcessPath: cmd})
 	}
 	return processes, nil
 }
