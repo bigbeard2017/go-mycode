@@ -1,5 +1,9 @@
 package windows
 
+func Test() {
+	println("asfasdf")
+}
+
 // import (
 // 	"log"
 // 	"syscall"

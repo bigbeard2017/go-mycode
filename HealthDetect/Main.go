@@ -4,9 +4,25 @@ import (
 	"fmt"
 
 	"go-mycode/HealthDetect/process"
+	linuxmac "go-mycode/HealthDetect/system/linuxMac"
+	windows "go-mycode/HealthDetect/system/windows"
 )
 
+func test() {
+	// x := new(linuxmac.DiskStatus)
+	d := new(linuxmac.SysUsedInfo)
+
+	px, _ := d.GetSystemUsedInfo()
+	// fmt.Printf("%v\n", d)
+	fmt.Printf("%v\n", px)
+	windows.Test()
+}
+
 func main() {
+	test()
+}
+
+func testProcess() {
 	var a process.Process
 	x := &a
 	result, err := x.GetAllProcess()
