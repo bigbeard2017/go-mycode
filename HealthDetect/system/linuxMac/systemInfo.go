@@ -3,7 +3,6 @@ package system
 import (
 	"bytes"
 	"fmt"
-	"log"
 	"os/exec"
 	"runtime"
 	"strconv"
@@ -61,49 +60,82 @@ func DiskUsage(path string) (disk DiskStatus) {
  */
 type SysUsedInfo struct {
 	CPUUsed      float64
-	MemUsed      float64
-	MemAll       float64
+	MemFree      uint64
+	MemAll       uint64
 	NetDown      float32
 	NetUp        float32
 	ProcessCount int
 }
 
+/**
+*获取系统的进程数量,CPU使用率,内存大小和空闲内存
+ */
 func (p *SysUsedInfo) GetSystemUsedInfo() (*SysUsedInfo, error) {
-	print("start")
-	cmd := exec.Command("top", "-n0")
-	print("start22")
+
+	cmd := exec.Command("top", "-bn1")
+
 	var out bytes.Buffer
 	cmd.Stdout = &out
 	err := cmd.Run()
-	print("start333")
+
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf(" Execute command  happen an  error :%v\n", err)
 		return nil, err
 	}
-	fmt.Printf("%v\n", out)
-	var r *SysUsedInfo
 
-	r.CPUUsed = 0.0
-	lineAllProcess := readline(out)
+	var lines [5]string
+	for i := 0; i < len(lines); i++ {
+		line, err := out.ReadString('\n')
+		if err != nil {
+			break
+		} else {
+			lines[i] = line
+		}
+	}
 
-	processTokens := strings.Split(lineAllProcess, " ")
+	var r SysUsedInfo
+
+	processTokens := strings.Split(lines[1], " ")
 	count, err := strconv.Atoi(processTokens[1])
-	if nil != err {
+	if nil == err {
 		r.ProcessCount = count
+	} else {
+		fmt.Printf("Convert procecc count  happend an  error :%v\n", err)
+		fmt.Println(lines[1])
 	}
-	cpuline := readline(out)
-	cpuTokens := strings.Split(cpuline, " ")
-	cpuFree := strings.Replace(cpuTokens[11], "%", "", -1)
-	cpuf, _ := strconv.ParseFloat(cpuFree, 32)
-	r.CPUUsed = 100.0 - cpuf
 
-	return r, nil
-}
-
-func readline(buff bytes.Buffer) string {
-	line, err := buff.ReadString('\n')
-	if nil != err {
-		return ""
+	cpuTokens := strings.Split(lines[2], " ")
+	cpuFree := cpuTokens[10]
+	cpuf, err := strconv.ParseFloat(cpuFree, 64)
+	if nil == err {
+		r.CPUUsed = 100.0 - cpuf
+	} else {
+		fmt.Printf(" Convert CPU used precentage happend an  error :%v\n", err)
+		fmt.Println(lines[2])
 	}
-	return line
+	memStr := strings.ToUpper(lines[3]) //strings.Replace(strings.Replace(strings.ToUpper(lines[3]), "KIB", -1), "MEM", -1)
+	memTokens := strings.Split(memStr, ",")
+	memall, err := strconv.ParseUint(memTokens[3], 10, 64)
+	if nil == err {
+		r.MemAll = memall
+	} else {
+		fmt.Printf(" Convert Mem All   (use index 3) happend an  error :%v\n", err)
+		fmt.Println(lines[3])
+	}
+	memfree, err := strconv.ParseUint(memTokens[7], 10, 64)
+	if nil == err {
+		r.MemFree = memfree
+	} else {
+		fmt.Printf(" Convert Mem free (use index 7) happend an  error :%v\n", err)
+		fmt.Println(lines[3])
+	}
+	memcatch, err := strconv.ParseUint(memTokens[13], 10, 64)
+	if nil == err {
+		r.MemFree = r.MemFree + memcatch
+	} else {
+		fmt.Printf(" Convert Mem catch (use index 13) happend an  error :%v\n", err)
+		fmt.Println(lines[3])
+	}
+
+	return &r, nil
 }

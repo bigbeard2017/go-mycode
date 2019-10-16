@@ -2,24 +2,34 @@ package main
 
 import (
 	"fmt"
+	"regexp"
 
 	"go-mycode/HealthDetect/process"
 	linuxmac "go-mycode/HealthDetect/system/linuxMac"
-	windows "go-mycode/HealthDetect/system/windows"
 )
 
 func test() {
-	// x := new(linuxmac.DiskStatus)
 	d := new(linuxmac.SysUsedInfo)
-
 	px, _ := d.GetSystemUsedInfo()
-	// fmt.Printf("%v\n", d)
-	fmt.Printf("%v\n", px)
-	windows.Test()
+	fmt.Printf("process count :%d,Cpu Used:%f,MemAll:%d KiB,MemFree:%d KiB\n", px.ProcessCount, px.CPUUsed, px.MemAll, px.MemFree)
 }
 
 func main() {
-	test()
+	//test()
+	v := testIsDigit("aa df :de")
+	println(v)
+	d := testIsDigit("111.1")
+	println(d)
+}
+
+func testIsDigit(val string) bool {
+	pattern := " ^(\\-|\\+)?\\d+(\\.\\d+)?$" //反斜杠要转义
+	result, ee := regexp.MatchString(pattern, val)
+	fmt.Println(result)
+	if nil != ee {
+		fmt.Printf("%v\n", ee)
+	}
+	return result
 }
 
 func testProcess() {
