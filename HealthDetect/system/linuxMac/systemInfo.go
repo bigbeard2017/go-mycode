@@ -3,7 +3,7 @@ package system
 import (
 	"bytes"
 	"fmt"
-	"go-mycode/Tools"
+	tools "go-mycode/Tools"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -11,7 +11,7 @@ import (
 )
 
 /**
-* 硬盘使用情况
+* 获取硬盘使用情况.
  */
 type DiskStatus struct {
 	All  uint64 `json:"all"`
@@ -20,7 +20,7 @@ type DiskStatus struct {
 }
 
 /**
-* disk usage of path/disk
+* disk usage of path/disk.
  */
 func DiskUsage(path string) (disk DiskStatus) {
 	fs := syscall.Statfs_t{}
@@ -31,11 +31,11 @@ func DiskUsage(path string) (disk DiskStatus) {
 	disk.All = fs.Blocks * uint64(fs.Bsize)
 	disk.Free = fs.Bfree * uint64(fs.Bsize)
 	disk.Used = disk.All - disk.Free
-	return
+	return disk
 }
 
 /**
-* 系统信息
+* 获取系统内存,CPU和进程数量信息.
  */
 type SysUsedInfo struct {
 	CPUUsed      float64
@@ -47,7 +47,7 @@ type SysUsedInfo struct {
 }
 
 /**
-*获取系统的进程数量,CPU使用率,内存大小和空闲内存
+*获取系统的进程数量,CPU使用率,内存大小和空闲内存.
  */
 func (p *SysUsedInfo) GetSystemUsedInfo() (*SysUsedInfo, error) {
 
@@ -87,7 +87,7 @@ func (p *SysUsedInfo) GetSystemUsedInfo() (*SysUsedInfo, error) {
 	var cpuInfo [5]string
 	i := 0
 	for index := 0; index < len(cpuTokens); {
-		r := Tools.IsNumeric(cpuTokens[index])
+		r := tools.IsNumeric(cpuTokens[index])
 		if r {
 			cpuInfo[i] = cpuTokens[index]
 			i++
