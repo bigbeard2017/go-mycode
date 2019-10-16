@@ -5,45 +5,23 @@ import (
 	"fmt"
 	"go-mycode/Tools"
 	"os/exec"
-	"runtime"
 	"strconv"
 	"strings"
 	"syscall"
 )
 
-type MemStatus struct {
-	All  uint32 `json:"all"`
-	Used uint32 `json:"used"`
-	Free uint32 `json:"free"`
-	Self uint64 `json:"self"`
-}
-
-func MemStat() MemStatus {
-	//自身占用
-	memStat := new(runtime.MemStats)
-	runtime.ReadMemStats(memStat)
-	mem := MemStatus{}
-	mem.Self = memStat.Alloc
-
-	// //系统占用,仅linux/mac下有效
-	// //system memory usage
-	// sysInfo := new(syscall.Sysinfo_t)
-	// err := syscall.Sysinfo(sysInfo)
-	// if err == nil {
-	// 	mem.All = sysInfo.Totalram * uint32(syscall.Getpagesize())
-	// 	mem.Free = sysInfo.Freeram * uint32(syscall.Getpagesize())
-	// 	mem.Used = mem.All - mem.Free
-	// }
-	return mem
-}
-
+/**
+* 硬盘使用情况
+ */
 type DiskStatus struct {
 	All  uint64 `json:"all"`
 	Used uint64 `json:"used"`
 	Free uint64 `json:"free"`
 }
 
-// disk usage of path/disk
+/**
+* disk usage of path/disk
+ */
 func DiskUsage(path string) (disk DiskStatus) {
 	fs := syscall.Statfs_t{}
 	err := syscall.Statfs(path, &fs)
@@ -101,7 +79,7 @@ func (p *SysUsedInfo) GetSystemUsedInfo() (*SysUsedInfo, error) {
 	if nil == err {
 		r.ProcessCount = count
 	} else {
-		fmt.Printf("Convert procecc count  happend an  error :%v\n", err)
+		fmt.Printf("Convert process count  happend an  error :%v\n", err)
 		fmt.Println(lines[1])
 	}
 
