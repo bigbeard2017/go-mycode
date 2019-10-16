@@ -3,6 +3,7 @@ package system
 import (
 	"bytes"
 	"fmt"
+	"go-mycode/Tools"
 	"os/exec"
 	"runtime"
 	"strconv"
@@ -105,7 +106,16 @@ func (p *SysUsedInfo) GetSystemUsedInfo() (*SysUsedInfo, error) {
 	}
 
 	cpuTokens := strings.Split(lines[2], " ")
-	cpuFree := cpuTokens[10]
+	var cpuInfo [5]string
+	i := 0
+	for index := 0; index < len(cpuTokens); {
+		r := Tools.IsNumeric(cpuTokens[index])
+		if r {
+			cpuInfo[i] = cpuTokens[index]
+			i++
+		}
+	}
+	cpuFree := cpuInfo[3]
 	cpuf, err := strconv.ParseFloat(cpuFree, 64)
 	if nil == err {
 		r.CPUUsed = 100.0 - cpuf
@@ -113,8 +123,9 @@ func (p *SysUsedInfo) GetSystemUsedInfo() (*SysUsedInfo, error) {
 		fmt.Printf(" Convert CPU used precentage happend an  error :%v\n", err)
 		fmt.Println(lines[2])
 	}
-	memStr := strings.ToUpper(lines[3]) //strings.Replace(strings.Replace(strings.ToUpper(lines[3]), "KIB", -1), "MEM", -1)
-	memTokens := strings.Split(memStr, ",")
+
+	memTokens := strings.Split(lines[3], " ")
+
 	memall, err := strconv.ParseUint(memTokens[3], 10, 64)
 	if nil == err {
 		r.MemAll = memall

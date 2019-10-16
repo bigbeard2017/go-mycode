@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"regexp"
+	"time"
 
 	"go-mycode/HealthDetect/process"
 	linuxmac "go-mycode/HealthDetect/system/linuxMac"
@@ -15,21 +15,12 @@ func test() {
 }
 
 func main() {
-	//test()
-	v := testIsDigit("aa df :de")
-	println(v)
-	d := testIsDigit("111.1")
-	println(d)
-}
-
-func testIsDigit(val string) bool {
-	pattern := " ^(\\-|\\+)?\\d+(\\.\\d+)?$" //反斜杠要转义
-	result, ee := regexp.MatchString(pattern, val)
-	fmt.Println(result)
-	if nil != ee {
-		fmt.Printf("%v\n", ee)
+	var flg bool
+	flg = true
+	for flg {
+		time.Sleep(10)
+		fmt.Printf("%v\n", time.Now.)
 	}
-	return result
 }
 
 func testProcess() {
