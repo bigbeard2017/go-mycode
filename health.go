@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"go-mycode/HealthDetect/process"
 )
 
@@ -22,10 +23,10 @@ func startDetect(f func(json string)) {
 	var p process.Process
 	result, err := p.GetAllProcess()
 	if nil != err {
-
+		fmt.Printf("获取进程信息发生错误:%v\n", err)
 	} else {
 		for _, r := range result {
-
+			fmt.Printf("%v\n", r)
 		}
 	}
 }
