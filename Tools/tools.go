@@ -1,6 +1,7 @@
 package tools
 
 import (
+	"encoding/json"
 	"fmt"
 	"os/exec"
 	"strings"
@@ -74,4 +75,12 @@ func ExecuteCommand(cmdString string) (string, error) {
 
 	s := string(out)
 	return s, nil
+}
+
+/**
+* 结构体转成json
+**/
+func ConvertToJson(v interface{}) (string, error) {
+	b, err := json.Marshal(v)
+	return "", err
 }
