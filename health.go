@@ -7,3 +7,7 @@ func main() {
 func readConfig() {
 
 }
+
+func startDetect() {
+
+}
