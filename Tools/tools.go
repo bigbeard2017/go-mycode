@@ -1,6 +1,10 @@
 package tools
 
-import "strings"
+import (
+	"fmt"
+	"os/exec"
+	"strings"
+)
 
 /**
 * 判断字符串是否为数字
@@ -53,4 +57,21 @@ func IsNumeric(val interface{}) bool {
 	}
 
 	return false
+}
+
+func ExecuteCommand(cmdString string) (string, error) {
+	cmdwithpath, err := exec.LookPath("bash")
+	if err != nil {
+		fmt.Println("not find bash.")
+		return "", err
+	}
+
+	cmd := exec.Command(cmdwithpath, "-c", cmdString)
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return "", err
+	}
+
+	s := string(out)
+	return s, nil
 }

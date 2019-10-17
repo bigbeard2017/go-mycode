@@ -2,6 +2,8 @@ package process
 
 import (
 	"bytes"
+	"fmt"
+	"go-mycode/Tools"
 	"log"
 	"os/exec"
 	"strconv"
@@ -33,6 +35,7 @@ func (p *Process) GetAllProcess() ([]Process, error) {
 	err := cmd.Run()
 	if err != nil {
 		log.Fatal(err)
+		fmt.Printf("%v\n", err)
 		return nil, err
 	}
 	processes := make([]Process, 0)
@@ -60,14 +63,40 @@ func (p *Process) GetAllProcess() ([]Process, error) {
 		}
 		mem, err := strconv.ParseFloat(ft[5], 64)
 		startTime := ft[8]
-		cmd := ft[10]
+		cmd := strings.Trim(ft[10], " ")
 		if len(ft) > 10 {
 			for index := 11; index < len(ft); index++ {
-				cmd = cmd + " " + ft[index]
+				cmd = cmd + " " + strings.Trim(ft[index], " ")
 			}
 		}
+		threadCount, err := GetProcessThreadCount(pid)
+		if nil != err {
+			fmt.Printf("%v\n", err)
+		}
 
-		processes = append(processes, Process{User: user, Pid: pid, CPU: cpu, Memory: mem, StartTime: startTime, ProcessPath: cmd})
+		processes = append(processes, Process{User: user, Pid: pid, CPU: cpu, Memory: mem, StartTime: startTime, ProcessPath: cmd, ThreadCount: threadCount})
+	}
+	for index := 0; index < len(processes); index++ {
+		for j := index; j < len(processes); j++ {
+			if processes[index].Pid > processes[j].Pid {
+				x := processes[index]
+				processes[index] = processes[j]
+				processes[j] = x
+			}
+		}
 	}
 	return processes, nil
+}
+
+func GetProcessThreadCount(pid int) (int, error) {
+
+	cmd := fmt.Sprintf("ps -T -p %s", strconv.Itoa(pid))
+	result, err := tools.ExecuteCommand(cmd)
+	if nil != err {
+		return -1, err
+	}
+
+	threadStrings := strings.Split(result, "\n")
+	threadCount := len(threadStrings) - 1
+	return threadCount, nil
 }

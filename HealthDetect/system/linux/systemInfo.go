@@ -7,32 +7,7 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
-	"syscall"
 )
-
-/**
-* 获取硬盘使用情况.
- */
-type DiskStatus struct {
-	All  uint64 `json:"all"`
-	Used uint64 `json:"used"`
-	Free uint64 `json:"free"`
-}
-
-/**
-* disk usage of path/disk.
- */
-func DiskUsage(path string) (disk DiskStatus) {
-	fs := syscall.Statfs_t{}
-	err := syscall.Statfs(path, &fs)
-	if err != nil {
-		return
-	}
-	disk.All = fs.Blocks * uint64(fs.Bsize)
-	disk.Free = fs.Bfree * uint64(fs.Bsize)
-	disk.Used = disk.All - disk.Free
-	return disk
-}
 
 /**
 * 获取系统内存,CPU和进程数量信息.
@@ -51,7 +26,7 @@ type SysUsedInfo struct {
  */
 func (p *SysUsedInfo) GetSystemUsedInfo() (*SysUsedInfo, error) {
 
-	cmd := exec.Command("top", "-bn1")
+	cmd := exec.Command("top", "-bn 1")
 
 	var out bytes.Buffer
 	cmd.Stdout = &out
@@ -68,7 +43,10 @@ func (p *SysUsedInfo) GetSystemUsedInfo() (*SysUsedInfo, error) {
 		if err != nil {
 			break
 		} else {
-			lines[i] = line
+			line = strings.Trim(line, " \\r\\t\\n\\v\\f")
+			if "" != line && len(line) > 0 {
+				lines[i] = line
+			}
 		}
 	}
 
@@ -82,15 +60,18 @@ func (p *SysUsedInfo) GetSystemUsedInfo() (*SysUsedInfo, error) {
 		fmt.Printf("Convert process count  happend an  error :%v\n", err)
 		fmt.Println(lines[1])
 	}
-
 	cpuTokens := strings.Split(lines[2], " ")
 	var cpuInfo [5]string
 	i := 0
-	for index := 0; index < len(cpuTokens); {
-		r := tools.IsNumeric(cpuTokens[index])
+
+	for _, s := range cpuTokens {
+		r := tools.IsNumeric(s)
 		if r {
-			cpuInfo[i] = cpuTokens[index]
+			cpuInfo[i] = strings.Trim(s, " \\r\\t\\n\\v\\f")
 			i++
+		}
+		if i >= len(cpuInfo) {
+			break
 		}
 	}
 	cpuFree := cpuInfo[3]
@@ -103,26 +84,49 @@ func (p *SysUsedInfo) GetSystemUsedInfo() (*SysUsedInfo, error) {
 	}
 
 	memTokens := strings.Split(lines[3], " ")
+	i = 0
+	var memInfo [8]string
+	for _, s := range memTokens {
+		r := tools.IsNumeric(s)
+		if r {
+			memInfo[i] = strings.Trim(s, " \\r\\t\\n\\v\\f")
+			i++
+		}
+		if i >= len(memInfo) {
+			break
+		}
+	}
+	memTokens = strings.Split(lines[4], " ")
+	for _, s := range memTokens {
+		r := tools.IsNumeric(s)
+		if r {
+			memInfo[i] = strings.Trim(s, " \\r\\t\\n\\v\\f")
+			i++
+		}
+		if i >= len(memInfo) {
+			break
+		}
+	}
 
-	memall, err := strconv.ParseUint(memTokens[3], 10, 64)
+	memall, err := strconv.ParseUint(memInfo[0], 10, 64)
 	if nil == err {
 		r.MemAll = memall
 	} else {
-		fmt.Printf(" Convert Mem All   (use index 3) happend an  error :%v\n", err)
+		fmt.Printf(" Convert Mem All   (use index 0) happend an  error :%v\n", err)
 		fmt.Println(lines[3])
 	}
-	memfree, err := strconv.ParseUint(memTokens[7], 10, 64)
+	memfree, err := strconv.ParseUint(memInfo[1], 10, 64)
 	if nil == err {
 		r.MemFree = memfree
 	} else {
-		fmt.Printf(" Convert Mem free (use index 7) happend an  error :%v\n", err)
+		fmt.Printf(" Convert Mem free (use index 1) happend an  error :%v\n", err)
 		fmt.Println(lines[3])
 	}
-	memcatch, err := strconv.ParseUint(memTokens[13], 10, 64)
+	memcatch, err := strconv.ParseUint(memInfo[3], 10, 64)
 	if nil == err {
 		r.MemFree = r.MemFree + memcatch
 	} else {
-		fmt.Printf(" Convert Mem catch (use index 13) happend an  error :%v\n", err)
+		fmt.Printf(" Convert Mem catch (use index 3) happend an  error :%v\n", err)
 		fmt.Println(lines[3])
 	}
 
