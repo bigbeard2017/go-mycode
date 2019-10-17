@@ -82,5 +82,6 @@ func ExecuteCommand(cmdString string) (string, error) {
 **/
 func ConvertToJson(v interface{}) (string, error) {
 	b, err := json.Marshal(v)
-	return "", err
+	jsonStr := string(b)
+	return jsonStr, err
 }
