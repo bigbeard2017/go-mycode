@@ -13,7 +13,7 @@ import (
 * 获取系统内存,CPU和进程数量信息.
  */
 type SysUsedInfo struct {
-	CPUUsed      float64
+	CPUFree      float64
 	MemFree      uint64
 	MemAll       uint64
 	NetDown      float32
@@ -74,10 +74,10 @@ func (p *SysUsedInfo) GetSystemUsedInfo() (*SysUsedInfo, error) {
 			break
 		}
 	}
-	cpuFree := cpuInfo[3]
-	cpuf, err := strconv.ParseFloat(cpuFree, 64)
+
+	cpufree, err := strconv.ParseFloat(cpuInfo[3], 64)
 	if nil == err {
-		r.CPUUsed = 100.0 - cpuf
+		r.CPUFree = cpufree
 	} else {
 		fmt.Printf(" Convert CPU used precentage happend an  error :%v\n", err)
 		fmt.Println(lines[2])
