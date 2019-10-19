@@ -3,7 +3,7 @@ package process
 import (
 	"bytes"
 	"fmt"
-	"go-mycode/Tools"
+	"go-mycode/tools"
 	"log"
 	"os/exec"
 	"strconv"
@@ -88,6 +88,7 @@ func (p *Process) GetAllProcess() ([]Process, error) {
 	return processes, nil
 }
 
+// GetProcessThreadCount 获取指定进程的线程数量
 func GetProcessThreadCount(pid int) (int, error) {
 
 	cmd := fmt.Sprintf("ps -T -p %s", strconv.Itoa(pid))
