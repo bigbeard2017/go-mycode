@@ -34,5 +34,9 @@ func checkHead(head map[string]interface{}) (bool, error) {
 		returnCode := head["C"]
 		return false, fmt.Errorf("服务器返回错误,错误编码:%s,错误描述:%s", returnCode, returnMsg)
 	}
+	version := head["V"]
+	if version != ProtocolVersion {
+		return false, fmt.Errorf("当前系统无法处理版本:%s的协议,只能处理:%s的协议", version, ProtocolVersion)
+	}
 	return true, nil
 }
