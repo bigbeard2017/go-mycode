@@ -3,6 +3,9 @@ package service
 //FRegCode 注册的F码
 const FRegCode string = "100001"
 
+// FServerStatReport 操作系统状态F码
+const FServerStatReport string = "100011"
+
 //ProtocolVersion 协议版本
 const ProtocolVersion string = "V1.0.1"
 
