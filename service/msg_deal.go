@@ -1,7 +1,7 @@
 package service
 
 import (
-	tools "go-mycode/tools"
+	tools "health_detect/tools"
 	"sync"
 )
 

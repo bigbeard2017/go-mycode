@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"go-mycode/HealthDetect/process"
-	"go-mycode/service"
+	"health_detect/detect/process"
+	"health_detect/service"
 )
 
 /**

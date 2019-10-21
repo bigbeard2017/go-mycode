@@ -6,7 +6,7 @@ import (
 	"os"
 	"strconv"
 
-	"go-mycode/ActiveMQ/activemq"
+	"health_detect/ActiveMQ/activemq"
 )
 
 func main() {

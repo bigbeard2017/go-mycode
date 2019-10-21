@@ -3,8 +3,8 @@ package detect
 import (
 	"fmt"
 
-	"go-mycode/HealthDetect/process"
-	linux "go-mycode/HealthDetect/system/linux"
+	"health_detect/detect/process"
+	linux "health_detect/detect/system/linux"
 )
 
 func test() {

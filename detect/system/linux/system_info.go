@@ -3,7 +3,7 @@ package system
 import (
 	"bytes"
 	"fmt"
-	tools "go-mycode/Tools"
+	tools "health_detect/tools"
 	"os/exec"
 	"strconv"
 	"strings"
