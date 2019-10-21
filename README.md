@@ -1,5 +1,6 @@
-# go-mycode
-go code
+# health_detect
+> 系统是采用go编写的用于获取linux系统的一些系统基本信息.比如进程数量,CPU使用情况.内存使用情况,网络使用情况.
+
 ## 系统功能
   本代码采用go语言编写  
   获取系统的相关信息并通过ActiveMQ发送出去;  
