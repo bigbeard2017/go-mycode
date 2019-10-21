@@ -9,9 +9,7 @@ import (
 	"strings"
 )
 
-/**
-* 获取系统内存,CPU和进程数量信息.
- */
+//SysUsedInfo  获取系统内存,CPU和进程数量信息.
 type SysUsedInfo struct {
 	CPUFree      float64
 	MemFree      uint64
@@ -21,9 +19,7 @@ type SysUsedInfo struct {
 	ProcessCount int
 }
 
-/**
-*获取系统的进程数量,CPU使用率,内存大小和空闲内存.
- */
+//GetSystemUsedInfo 获取系统的进程数量,CPU使用率,内存大小和空闲内存.
 func (p *SysUsedInfo) GetSystemUsedInfo() (*SysUsedInfo, error) {
 
 	cmd := exec.Command("top", "-bn 1")

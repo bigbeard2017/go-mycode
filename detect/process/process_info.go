@@ -10,9 +10,7 @@ import (
 	"strings"
 )
 
-/**
-* 获取系统的进程信息
-**/
+//Process 获取系统的进程信息
 type Process struct {
 	ProcessName string
 	ProcessPath string
@@ -24,10 +22,7 @@ type Process struct {
 	User        string
 }
 
-/**
-* 	功能:
-*		获取系统的所有进程信息
-**/
+//GetAllProcess 获取系统的所有进程信息
 func (p *Process) GetAllProcess() ([]Process, error) {
 	cmd := exec.Command("ps", "aux")
 	var out bytes.Buffer
