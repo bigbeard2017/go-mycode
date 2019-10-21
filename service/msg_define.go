@@ -1,20 +1,18 @@
 package service
 
-const F_REG_CODE string = "100001"
+//FRegCode 注册的F码
+const FRegCode string = "100001"
 
-const PROTOCOL_VERSION string = "V1.0.1"
+//ProtocolVersion 协议版本
+const ProtocolVersion string = "V1.0.1"
 
-/**
-* 完整的消息
- */
+// Msg 完整的消息
 type Msg struct {
 	H MsgHead
 	B interface{}
 }
 
-/**
-* 发送的消息头部
- */
+// MsgHead 发送的消息头部
 type MsgHead struct {
 	F string
 	V string
@@ -26,25 +24,19 @@ type MsgHead struct {
 	I int
 }
 
-/**
-*注册消息体
- */
+// MsgRegBody 注册消息体
 type MsgRegBody struct {
 	ServiceCode string
 }
 
-/**
-*磁盘空间消息
-**/
+// DiskSpaceInfo 磁盘空间消息
 type DiskSpaceInfo struct {
-	Path        string
-	TotoalSpace int
-	FreeSpace   int
+	Path       string
+	TotalSpace int
+	FreeSpace  int
 }
 
-/**
-*进程信息消息
-**/
+//ProcessInfo 进程信息消息
 type ProcessInfo struct {
 	PID         int
 	ProcessName string
@@ -57,9 +49,7 @@ type ProcessInfo struct {
 	PortInfo    string
 }
 
-/**
-*服务器整体信息
- */
+// MsgServerInfoBody 服务器整体信息
 type MsgServerInfoBody struct {
 	ServerIP      string
 	ServerName    string

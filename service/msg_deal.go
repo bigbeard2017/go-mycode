@@ -15,19 +15,17 @@ func getMsgIndex() uint64 {
 	return msgIndex
 }
 
-/**
-* 创建注册用的json消息
-**/
+//CreateRegisterMsg 创建注册用的json消息
 func CreateRegisterMsg(serviceCode string) string {
 
-	msgH := createHead(F_REG_CODE, "")
+	msgH := createHead(FRegCode, "")
 	var msg Msg
 	msg.H = msgH
-	var msgb MsgRegBody
-	msgb.ServiceCode = serviceCode
+	var msgbody MsgRegBody
+	msgbody.ServiceCode = serviceCode
 
-	msg.B = msgb
-	json, err := tools.ConvertToJson(msg)
+	msg.B = msgbody
+	json, err := tools.ConvertToJSON(msg)
 	if nil != err {
 		return ""
 	}
@@ -37,7 +35,7 @@ func CreateRegisterMsg(serviceCode string) string {
 func createHead(code, token string) MsgHead {
 	var m MsgHead
 	m.F = code
-	m.V = PROTOCOL_VERSION
+	m.V = ProtocolVersion
 	m.R = true
 	m.K = token
 	m.S = getMsgIndex() //strconv.Itoa(getMsgIndex())
@@ -47,9 +45,7 @@ func createHead(code, token string) MsgHead {
 	return m
 }
 
-/**
-* 创建检测消息
-**/
+// CreateDetectMsg 创建检测消息
 func CreateDetectMsg() string {
 
 	json := ""

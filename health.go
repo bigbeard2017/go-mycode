@@ -11,12 +11,10 @@ import (
 	第一步启动一个线程,定时采集,时间间隔从配置文件中获取.
 **/
 func main() {
-	msg := service.CreateRegisterMsg("A10101")
-	println(msg)
-	msg1 := service.CreateRegisterMsg("A10102")
-	println(msg1)
+
 	msg2 := service.CreateRegisterMsg("A10103")
 	println(msg2)
+	service.DispatherMsg(msg2)
 }
 
 func readConfig() {

@@ -7,9 +7,7 @@ import (
 	"strings"
 )
 
-/**
-* 判断字符串是否为数字
- */
+// IsNumeric 判断字符串是否为数字
 func IsNumeric(val interface{}) bool {
 	switch val.(type) {
 	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
@@ -60,6 +58,7 @@ func IsNumeric(val interface{}) bool {
 	return false
 }
 
+// ExecuteCommand 执行linux命令
 func ExecuteCommand(cmdString string) (string, error) {
 	cmdwithpath, err := exec.LookPath("bash")
 	if err != nil {
@@ -77,10 +76,8 @@ func ExecuteCommand(cmdString string) (string, error) {
 	return s, nil
 }
 
-/**
-* 结构体转成json
-**/
-func ConvertToJson(v interface{}) (string, error) {
+// ConvertToJSON 结构体转成json
+func ConvertToJSON(v interface{}) (string, error) {
 	b, err := json.Marshal(v)
 	jsonStr := string(b)
 	return jsonStr, err
